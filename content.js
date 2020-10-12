@@ -14,21 +14,16 @@ function fetchMovieNameYear() {
   window.sessionStorage.clear();
 
   for (var i = 0; i < anchorElements.length; i++) {
-    console.log("inside");
     var title = anchorElements[i].innerText;
     var jqueryObject = $(anchorElements[i]);
     var existingIMDBRating = window.sessionStorage.getItem(title);
     if (existingIMDBRating) {
-      console.log("already exists", existingIMDBRating);
       var idname = existingIMDBRating.name.replace(/\s/g, '');
       if (!$('#' + idname).length)
         $('<div id="' + idname + '">IMDB: ' + existingIMDBRating.name + '</div>').insertAfter(jqueryObject);
     } else {
       makeRequestAndAddRating(title, jqueryObject);
     }
-    title = null;
-    jqueryObject = null;
-    existingIMDBRating = null;
   }
 }
 
@@ -38,7 +33,7 @@ if (window.sessionStorage !== "undefined") {
   var observer = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
       if (mutation.type === 'childList') {
-          console.log('A child node has been added or removed.');
+
         }
         else if (mutation.type === 'attributes') {
           window.setTimeout(fetchMovieNameYear, 5);
@@ -62,23 +57,20 @@ function makeRequestAndAddRating(name, jqueryObject) {
     if (xhr.status === 200) {
       var apiResponse = JSON.parse(xhr.responseText);
       var imdbRating = apiResponse["imdbRating"];
+      var year = apiResponse["Year"];
       window.sessionStorage.setItem(name, { name: name, imdbRating: imdbRating });
       var idname = name.replace(/\s/g, '');
-      idname = encodeURI(idname);
-      if (!$('#' + idname).length)
-        $('<div id="' + idname + '">IMDB: ' + imdbRating + '</div>').insertAfter($(jqueryObject));
+      idname = makeNameId(idname);
+      if (!$('#' + idname).length) {
+        if (imdbRating)
+          $('<div id="' + idname + '">' + year + ', IMDB: ' + imdbRating + '</div>').insertAfter($(jqueryObject));
+      }
+        
     }
   };
   xhr.send();
 }
-function makeNameId($string) {
-    //Lower case everything
-    $string = strtolower($string);
-    //Make alphanumeric (removes all other characters)
-    $string = preg_replace("/[^a-z0-9_\s-]/", "", $string);
-    //Clean up multiple dashes or whitespaces
-    $string = preg_replace("/[\s-]+/", " ", $string);
-    //Convert whitespaces and underscore to dash
-    $string = preg_replace("/[\s_]/", "-", $string);
-    return $string;
+
+function makeNameId(string) {
+    return string.replace(/(^-\d-|^\d|^-\d|^--)/,'a$1').replace(/[\W]/g, '-');
 }
