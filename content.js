@@ -6,13 +6,10 @@ function fetchMovieNameYear() {
   } else {
     return;
   }
-
   if (cardElements === undefined || cardElements[0] === undefined) {
     return;
   }
-
   window.sessionStorage.clear();
-
   for (var i = 0; i < anchorElements.length; i++) {
     var title = anchorElements[i].innerText;
     var jqueryObject = $(anchorElements[i]);
@@ -29,18 +26,13 @@ function fetchMovieNameYear() {
 
 if (window.sessionStorage !== "undefined") {
   var target = document.body;
-  // create an observer instance
   var observer = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
-      if (mutation.type === 'childList') {
-
-        }
-        else if (mutation.type === 'attributes') {
+      if (mutation.type === 'attributes') {
           window.setTimeout(fetchMovieNameYear, 5);
-        }
+      }
     });
   });
-  // configuration of the observer:
   var config = {
     attributes: true,
     childList: true,
@@ -49,8 +41,7 @@ if (window.sessionStorage !== "undefined") {
 }
 
 function makeRequestAndAddRating(name, jqueryObject) {
-  var url = "https://www.omdbapi.com/?apikey=da37df7e&t=" + encodeURI(name);
-
+  var url = "https://www.omdbapi.com/?apikey=<api_key_here>&t=" + encodeURI(name);
   var xhr = new XMLHttpRequest();
   xhr.open("GET", url);
   xhr.onload = function () {
@@ -65,7 +56,6 @@ function makeRequestAndAddRating(name, jqueryObject) {
         if (imdbRating)
           $('<div id="' + idname + '">' + year + ', IMDB: ' + imdbRating + '</div>').insertAfter($(jqueryObject));
       }
-        
     }
   };
   xhr.send();
