@@ -2,7 +2,7 @@
 chrome extension that shows imdb ratings when browsing netflix
 could use improvements, feel free to improve on it.
 
-#Usage
+# Usage
 1.  clone project
 2.  go to http://www.omdbapi.com/
 
