@@ -1,6 +1,8 @@
 # netflix-imdb-ratings
 chrome extension that shows imdb ratings when browsing netflix
 
+![Image of the extension](https://i.imgur.com/kj0V2sb.png)
+
 could use improvements, feel free to improve on it.
 
 # Usage
@@ -18,7 +20,6 @@ could use improvements, feel free to improve on it.
 3.  go to chrome://extensions/
 
     "load unpacked" and choose the project folder
-
 
 # current bugs/todos:
 
